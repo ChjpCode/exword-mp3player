@@ -20,7 +20,7 @@ all: ja_build
 	$(CC) $(CFLAGS) -c $< -o $@
 
 %.o: %.s
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -x assembler-with-cpp -c $< -o $@
 
 ja_build: $(OBJS)
 	mkdir -p build/ja
