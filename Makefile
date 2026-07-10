@@ -29,7 +29,6 @@ ja_build: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o build/ja/$(TARGET).elf
 	$(OBJCOPY) -O binary build/ja/$(TARGET).elf build/ja/$(TARGET).bin
 	cp html/ja/menu.html build/ja/
-	$(LIBEXWORD) pack build/ja/ $(APPID) "$(APPTITLE)"
 
 clean:
 	rm -rf build $(OBJS)
