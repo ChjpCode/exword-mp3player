@@ -3,18 +3,63 @@
 #include <string.h>
 #include <syscalls/syscalls.h>
 
+#include <sh4a/input/keypad.h>
+#include <graphics/text.h>
+
+void *memmove(void *dest, const void *src, size_t n) {
+    unsigned char *d = dest;
+    const unsigned char *s = src;
+    if (d < s) {
+        while (n--) *d++ = *s++;
+    } else {
+        d += n; s += n;
+        while (n--) *--d = *--s;
+    }
+    return dest;
+}
+int strncmp(const char *s1, const char *s2, size_t n) {
+    while (n && *s1 && (*s1 == *s2)) { ++s1; ++s2; --n; }
+    if (n == 0) return 0;
+    return (*(unsigned char *)s1 - *(unsigned char *)s2);
+}
+
 #define MINIMP3_IMPLEMENTATION
 #define MINIMP3_NO_SIMD 
 #include "minimp3.h"
 #include "bg_image.h"
 
+void graphics_clear(unsigned short color) {
+    unsigned short *vram = (unsigned short *)0xAC200000;
+    for (int i = 0; i < 528 * 320; i++) vram[i] = color;
+}
+void draw_rect(int x, int y, int w, int h, unsigned short color) {
+    unsigned short *vram = (unsigned short *)0xAC200000;
+    for (int j = y; j < y + h; j++) {
+        for (int i = x; i < x + w; i++) {
+            if (i >= 0 && i < 528 && j >= 0 && j < 320)
+                vram[j * 528 + i] = color;
+        }
+    }
+}
+void draw_string(int x, int y, const char *str, unsigned short color) {
+    render_text(x, y, (char*)str);
+}
+unsigned int sys_get_key(void) {
+    keypad_read();
+    if (get_key_state(KEY_POWER)) return 0x01;
+    if (get_key_state(KEY_BACK)) return 0x02;
+    if (get_key_state(KEY_RIGHT)) return 88;
+    if (get_key_state(KEY_LEFT)) return 87;
+    if (get_key_state(KEY_UP)) return 77;
+    if (get_key_state(KEY_DOWN)) return 86;
+    return 0;
+}
+void pcm_init(int sample_rate, int channels) {}
+void pcm_submit(short *buffer, int samples) {}
+
+
+
 extern void graphics_init(int width, int height, void *framebuffer);
-extern void graphics_clear(unsigned short color);
-extern void draw_rect(int x, int y, int w, int h, unsigned short color);
-extern void draw_string(int x, int y, const char *str, unsigned short color);
-extern unsigned int sys_get_key(void);
-extern void pcm_init(int sample_rate, int channels);
-extern void pcm_submit(short *buffer, int samples);
 
 #define COLOR_BG        0xE79E  // Light Cyan
 #define COLOR_TEXT      0x0000  // Black
