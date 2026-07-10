@@ -289,7 +289,7 @@ int main() {
         
         if (fp) {
             int len = strlen(filename);
-            if (len > 4 && strcasecmp(filename + len - 4, ".wav") == 0) {
+            if (len > 4 && (strcmp(filename + len - 4, ".wav") == 0 || strcmp(filename + len - 4, ".WAV") == 0)) {
                 action = play_wav(fp, filename);
             } else {
                 action = play_mp3(fp, filename);
