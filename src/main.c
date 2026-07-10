@@ -26,7 +26,6 @@ int strncmp(const char *s1, const char *s2, unsigned int n) {
 #define MINIMP3_IMPLEMENTATION
 #define MINIMP3_NO_SIMD 
 #include "minimp3.h"
-#include "bg_image.h"
 
 void graphics_clear(unsigned short color) {
     unsigned short *vram = (unsigned short *)0xAC200000;
@@ -71,14 +70,14 @@ extern void graphics_init(int width, int height, void *framebuffer);
 #define IN_BUF_SIZE     16384
 #define PCM_BUF_SIZE    1152 * 2
 
-#define MAX_SONGS       100
+#define MAX_SONGS       10
 
 char playlist[MAX_SONGS][256];
 int song_count = 0;
 int current_song_index = 0;
 
 void draw_walkman_ui_static(const char *format, const char *filename) {
-    memcpy((void*)0xAC200000, bg_image, 528 * 320 * 2);
+    graphics_clear(COLOR_BG);
     
     char header[64];
     sprintf(header, "[%d/%d] %s", current_song_index + 1, song_count, format);
