@@ -7,8 +7,8 @@ SRCS_C    := src/main.c $(wildcard src/libc/*.c)
 SRCS_S    := $(wildcard src/libc/*.s)
 OBJS      := $(SRCS_C:.c=.o) $(SRCS_S:.s=.o)
 
-CC        := sh4-elf-gcc
-OBJCOPY   := sh4-elf-objcopy
+CC        := sh-elf-gcc
+OBJCOPY   := sh-elf-objcopy
 LIBEXWORD := libexword
 
 CFLAGS    := -O2 -m4-nofpu -I. -I$(DEVKITPRO)/libdataplus/include -Isrc/libc/include
