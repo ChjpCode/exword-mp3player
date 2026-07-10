@@ -32,7 +32,7 @@ void graphics_clear(unsigned short color) {
     unsigned short *vram = (unsigned short *)0xAC200000;
     for (int i = 0; i < 528 * 320; i++) vram[i] = color;
 }
-void draw_rect(int x, int y, int w, int h, unsigned short color) {
+void custom_draw_rect(int x, int y, int w, int h, unsigned short color) {
     unsigned short *vram = (unsigned short *)0xAC200000;
     for (int j = y; j < y + h; j++) {
         for (int i = x; i < x + w; i++) {
@@ -93,16 +93,16 @@ void draw_walkman_ui_static(const char *format, const char *filename) {
 }
 
 void update_walkman_progress(int current_sec, int total_sec) {
-    draw_rect(20, 90, 160, 16, COLOR_BG); 
+    custom_draw_rect(20, 90, 160, 16, COLOR_BG); 
     
     char time_str[32];
     sprintf(time_str, "%02d:%02d / %02d:%02d", current_sec / 60, current_sec % 60, total_sec / 60, total_sec % 60);
     draw_string(20, 90, time_str, COLOR_TEXT);
     
-    draw_rect(20, 110, 160, 6, COLOR_CASSETTE);
+    custom_draw_rect(20, 110, 160, 6, COLOR_CASSETTE);
     int progress_w = total_sec > 0 ? ((current_sec * 160) / total_sec) : 0;
     if (progress_w > 160) progress_w = 160;
-    draw_rect(20, 110, progress_w, 6, COLOR_ACCENT);
+    custom_draw_rect(20, 110, progress_w, 6, COLOR_ACCENT);
 }
 
 unsigned int read_u32_le(unsigned char *buf) {
