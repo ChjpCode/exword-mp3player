@@ -1,0 +1,31 @@
+name: Build MP3 Player
+
+on:
+  push:
+    branches: [ "*" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build EX-word addon
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download & Extract DevkitPro
+        run: |
+          cd ..
+          curl -sSfL https://github.com/MaxSignal/buildscripts/releases/download/Linux/devkitPro.tar.gz | tar -zxf -
+          cd -
+
+      - name: Build Project
+        run: |
+          DEVKITPRO="$OLDPWD/devkitPro" DEVKITSH4="$DEVKITPRO/devkitSH4" PATH="$DEVKITPRO/tools/bin:$DEVKITSH4/bin:$PATH" make
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: exword-mp3player-build
+          path: build/
+
