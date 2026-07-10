@@ -3,6 +3,8 @@ MODNAME   := EXMP3
 APPTITLE  := MP3/WAV Player Walkman
 APPID     := EXMP3
 
+include $(DEVKITSH4)/exword_rules
+
 SRCS_C    := src/main.c $(wildcard src/libc/*.c)
 SRCS_S    := $(wildcard src/libc/*.s)
 OBJS      := $(SRCS_C:.c=.o) $(SRCS_S:.s=.o)
@@ -11,8 +13,8 @@ CC        := sh-elf-gcc
 OBJCOPY   := sh-elf-objcopy
 LIBEXWORD := libexword
 
-CFLAGS    := -O2 -m4-nofpu -I. -I$(DEVKITPRO)/libdataplus/include -Isrc/libc/include
-LDFLAGS   := -L$(DEVKITPRO)/libdataplus/lib -lgraphics -lc
+CFLAGS    := -O2 -m4-nofpu -fno-builtin -nostdlib -I. -I$(DEVKITPRO)/libdataplus/include -Isrc/libc/include
+LDFLAGS   := -nostdlib -L$(DEVKITPRO)/libdataplus/lib -ldataplus -lgraphics -lsh4a
 
 all: ja_build
 
