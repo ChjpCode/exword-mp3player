@@ -14,7 +14,7 @@ OBJCOPY   := sh-elf-objcopy
 LIBEXWORD := libexword
 
 CFLAGS    := -O2 -m4-nofpu -fno-builtin -nostdlib -I. -I$(DEVKITPRO)/libdataplus/include -Isrc/libc/include
-LDFLAGS   := -nostdlib -L$(DEVKITPRO)/libdataplus/lib -ldataplus -lgraphics -lsh4a
+LDFLAGS   := -nostdlib -L$(DEVKITPRO)/libdataplus/lib -ldataplus -lgraphics -lsh4a -lgcc
 
 all: ja_build
 
