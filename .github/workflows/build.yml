@@ -15,10 +15,8 @@ jobs:
 
       - name: Download & Build
         run: |
-          cd ..
-          curl -sSfL https://github.com/MaxSignal/buildscripts/releases/download/Linux/devkitPro.tar.gz | tar -zxf -
-          cd -
-          DEVKITPRO="$OLDPWD/devkitPro" DEVKITSH4="$DEVKITPRO/devkitSH4" PATH="$DEVKITPRO/tools/bin:$DEVKITSH4/bin:$PATH" make
+          curl -sSfL https://github.com/MaxSignal/buildscripts/releases/download/Linux/devkitPro.tar.gz | tar -zxf - -C ..
+          DEVKITPRO="${GITHUB_WORKSPACE}/../devkitPro" DEVKITSH4="${GITHUB_WORKSPACE}/../devkitPro/devkitSH4" PATH="${GITHUB_WORKSPACE}/../devkitPro/tools/bin:${GITHUB_WORKSPACE}/../devkitPro/devkitSH4/bin:$PATH" make
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
