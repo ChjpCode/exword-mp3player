@@ -19,14 +19,14 @@ LDFLAGS   := -nostdlib -L$(DEVKITPRO)/libdataplus/lib -ldataplus -lgraphics -lsh
 all: ja_build
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(MACHDEP) $(CFLAGS) -c $< -o $@
 
 %.o: %.s
-	$(CC) $(CFLAGS) -x assembler-with-cpp -c $< -o $@
+	$(CC) $(MACHDEP) $(CFLAGS) -x assembler-with-cpp -c $< -o $@
 
 ja_build: $(OBJS)
 	mkdir -p build/ja
-	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o build/ja/$(TARGET).elf
+	$(CC) $(MACHDEP) $(CFLAGS) $(OBJS) $(LDFLAGS) -o build/ja/$(TARGET).elf
 	elf2d01 -m $(MODNAME) build/ja/$(TARGET).elf build/ja/$(TARGET).d01
 	cp html/ja/menu.html build/ja/
 
