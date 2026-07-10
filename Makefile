@@ -27,7 +27,7 @@ all: ja_build
 ja_build: $(OBJS)
 	mkdir -p build/ja
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o build/ja/$(TARGET).elf
-	$(OBJCOPY) -O binary build/ja/$(TARGET).elf build/ja/$(TARGET).bin
+	elf2d01 -m $(MODNAME) build/ja/$(TARGET).elf build/ja/$(TARGET).d01
 	cp html/ja/menu.html build/ja/
 
 clean:
