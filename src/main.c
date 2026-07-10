@@ -67,7 +67,7 @@ extern void graphics_init(int width, int height, void *framebuffer);
 #define COLOR_BLUE      0x041F
 #define COLOR_ACCENT    0xF812  // Pink progress bar
 
-#define IN_BUF_SIZE     16384
+#define IN_BUF_SIZE     4096
 #define PCM_BUF_SIZE    1152 * 2
 
 #define MAX_SONGS       10
