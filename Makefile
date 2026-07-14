@@ -33,7 +33,7 @@ build/%/$(APPID): $(TARGET).d01 $$(wildcard $(HTMLDIR)/$$*/*.htm)
 	@mkdir -p $@
 	@cp $(TARGET).d01 $@
 	@for f in $(HTMLDIR)/$*/*.htm; do \
-		sed -e 's/@APPTITLE/$(APPTITLE)/g' -e 's/@APPID/$(APPID)/g' -e 's/@APPMOD/$(APPMOD)/g' $$f > $@/$$(basename $$f); \
+		sed -e 's|@APPTITLE|$(APPTITLE)|g' -e 's|@APPID|$(APPID)|g' -e 's|@APPMOD|$(APPMOD)|g' $$f > $@/$$(basename $$f); \
 	done
 	@touch $@/fileinfo.cji
 
