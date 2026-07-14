@@ -5,6 +5,7 @@
 
 #include <sh4a/input/keypad.h>
 #include <graphics/text.h>
+#include <graphics/lcdc.h>
 
 void *memmove(void *dest, const void *src, unsigned int n) {
     unsigned char *d = dest;
@@ -89,6 +90,7 @@ void draw_walkman_ui_static(const char *format, const char *filename) {
     draw_string(20, 50, name_trunc, COLOR_TEXT);
 
     draw_string(20, 140, "[ UP/DN = TUA ] [ L/R = CHUYEN BAI ]", COLOR_TEXT);
+    lcdc_copy_vram();
 }
 
 void update_walkman_progress(int current_sec, int total_sec) {
@@ -102,6 +104,7 @@ void update_walkman_progress(int current_sec, int total_sec) {
     int progress_w = total_sec > 0 ? ((current_sec * 160) / total_sec) : 0;
     if (progress_w > 160) progress_w = 160;
     custom_draw_rect(20, 110, progress_w, 6, COLOR_ACCENT);
+    lcdc_copy_vram();
 }
 
 unsigned int read_u32_le(unsigned char *buf) {
@@ -319,8 +322,10 @@ int main() {
     if (song_count == 0) {
         graphics_clear(COLOR_BG);
         draw_string(50, 150, "ERROR: Khong tim thay bai hat nao trong thu muc goc!", COLOR_TEXT);
+        lcdc_copy_vram();
         while(sys_get_key() == 0);
         graphics_clear(0x0000);
+        lcdc_copy_vram();
         return -2;
     }
 
@@ -356,5 +361,6 @@ int main() {
     }
 
     graphics_clear(0x0000);
+    lcdc_copy_vram();
     return 0;
 }
