@@ -122,19 +122,47 @@ void scan_songs() {
     
     song_count = 0;
     
-    if (sys_findfirst("*.mp3", &handle, filename, &type) == 0) {
+    // Quét thẻ nhớ SD
+    if (sys_findfirst("\\_SD_00\\*.mp3", &handle, filename, &type) == 0) {
         do {
             if (type == 1 && song_count < MAX_SONGS) {
-                strcpy(playlist[song_count++], filename);
+                sprintf(playlist[song_count++], "\\_SD_00\\%s", filename);
+            }
+        } while (sys_findnext(handle, filename, &type) == 0);
+        sys_findclose(handle);
+    }
+    if (sys_findfirst("\\_SD_00\\*.wav", &handle, filename, &type) == 0) {
+        do {
+            if (type == 1 && song_count < MAX_SONGS) {
+                sprintf(playlist[song_count++], "\\_SD_00\\%s", filename);
             }
         } while (sys_findnext(handle, filename, &type) == 0);
         sys_findclose(handle);
     }
     
+    // Quét bộ nhớ trong
+    if (sys_findfirst("\\_INTERNAL_00\\*.mp3", &handle, filename, &type) == 0) {
+        do {
+            if (type == 1 && song_count < MAX_SONGS) {
+                sprintf(playlist[song_count++], "\\_INTERNAL_00\\%s", filename);
+            }
+        } while (sys_findnext(handle, filename, &type) == 0);
+        sys_findclose(handle);
+    }
+    
+    // Quét thư mục hiện tại (nơi chứa các file đính kèm chung với Từ điển)
+    if (sys_findfirst("*.mp3", &handle, filename, &type) == 0) {
+        do {
+            if (type == 1 && song_count < MAX_SONGS) {
+                sprintf(playlist[song_count++], "%s", filename);
+            }
+        } while (sys_findnext(handle, filename, &type) == 0);
+        sys_findclose(handle);
+    }
     if (sys_findfirst("*.wav", &handle, filename, &type) == 0) {
         do {
             if (type == 1 && song_count < MAX_SONGS) {
-                strcpy(playlist[song_count++], filename);
+                sprintf(playlist[song_count++], "%s", filename);
             }
         } while (sys_findnext(handle, filename, &type) == 0);
         sys_findclose(handle);
@@ -317,13 +345,20 @@ int play_mp3(FILE *fp, const char* filename) {
 int main() {
     graphics_init(528, 320, (void*)0xAC200000);
     
+    // Đợi người dùng thả phím Enter/Touch ra trước khi bắt đầu
+    while(sys_get_key() != 0);
+    
     scan_songs();
     
     if (song_count == 0) {
         graphics_clear(COLOR_BG);
-        draw_string(50, 150, "ERROR: Khong tim thay bai hat nao trong thu muc goc!", COLOR_TEXT);
+        draw_string(50, 150, "ERROR: Khong tim thay bai hat (.mp3) nao!", COLOR_TEXT);
+        draw_string(50, 170, "Hay chep nhac vao thu muc goc cua the nho.", COLOR_TEXT);
         lcdc_copy_vram();
-        while(sys_get_key() == 0);
+        
+        while(sys_get_key() != 0); // Đảm bảo phím đã nhả
+        while(sys_get_key() == 0); // Đợi phím mới để thoát
+        
         graphics_clear(0x0000);
         lcdc_copy_vram();
         return -2;
