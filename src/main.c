@@ -122,7 +122,7 @@ void scan_songs() {
     
     song_count = 0;
     
-    // Quét thẻ nhớ SD
+    // Quét thư mục gốc của Thẻ nhớ
     if (sys_findfirst("\\_SD_00\\*.mp3", &handle, filename, &type) == 0) {
         do {
             if (type == 1 && song_count < MAX_SONGS) {
@@ -131,38 +131,12 @@ void scan_songs() {
         } while (sys_findnext(handle, filename, &type) == 0);
         sys_findclose(handle);
     }
-    if (sys_findfirst("\\_SD_00\\*.wav", &handle, filename, &type) == 0) {
-        do {
-            if (type == 1 && song_count < MAX_SONGS) {
-                sprintf(playlist[song_count++], "\\_SD_00\\%s", filename);
-            }
-        } while (sys_findnext(handle, filename, &type) == 0);
-        sys_findclose(handle);
-    }
     
-    // Quét bộ nhớ trong
+    // Quét thư mục gốc của Bộ nhớ trong
     if (sys_findfirst("\\_INTERNAL_00\\*.mp3", &handle, filename, &type) == 0) {
         do {
             if (type == 1 && song_count < MAX_SONGS) {
                 sprintf(playlist[song_count++], "\\_INTERNAL_00\\%s", filename);
-            }
-        } while (sys_findnext(handle, filename, &type) == 0);
-        sys_findclose(handle);
-    }
-    
-    // Quét thư mục hiện tại (nơi chứa các file đính kèm chung với Từ điển)
-    if (sys_findfirst("*.mp3", &handle, filename, &type) == 0) {
-        do {
-            if (type == 1 && song_count < MAX_SONGS) {
-                sprintf(playlist[song_count++], "%s", filename);
-            }
-        } while (sys_findnext(handle, filename, &type) == 0);
-        sys_findclose(handle);
-    }
-    if (sys_findfirst("*.wav", &handle, filename, &type) == 0) {
-        do {
-            if (type == 1 && song_count < MAX_SONGS) {
-                sprintf(playlist[song_count++], "%s", filename);
             }
         } while (sys_findnext(handle, filename, &type) == 0);
         sys_findclose(handle);
